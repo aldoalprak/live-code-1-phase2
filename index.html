@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LiveCOde</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>	
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+	<div class="container" id="app">
+	      <label>Name
+	      	<input type="text" v-model="name" >
+	      </label>	<br><br>
+	      <label>Email
+	      	<input type="text" v-model="email" >
+	      	<button v-on:click="requestToken()">request token</button>
+	      </label><br><br><br><br>
+
+	      <label>File
+	        <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/><br><br>
+	      	<button v-on:click="uploadFile()">submit</button>
+	      </label><br><br>
+
+	      <label>Get Image
+	      <button v-on:click="getImage()">get IMAGE</button><br>
+	  	  </label><br>
+	        
+	    </div>
+ 	</div>
+</body>
+</html>
+
+
+<script>
+	var app = new Vue({
+		el: '#app',
+		data:{
+
+			file:'',
+			name:'',
+			email:'',
+			token:''
+		},
+		
+		methods:{
+			requestToken() {
+				axios.post('http://35.197.135.159/request-token',{
+					name: this.name,
+					email: this.email
+				})
+				.then(response=>{
+					// console.log(response.data.uuid)
+					this.token = response.data.uuid
+					console.log(this.token)
+				})
+				.catch(err=>{
+					console.log(err)
+				})
+
+			},
+			getImage() {
+				axios.get('http://35.197.135.159/image',{token:this.token})
+				.then(response=>{
+					console.log(response)
+				})
+			}
+
+		},
+
+	})
+
+
+</script>	
