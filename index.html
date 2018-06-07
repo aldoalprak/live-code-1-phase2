@@ -23,8 +23,12 @@
 	      <label>Get Image
 	      <button v-on:click="getImage()">get IMAGE</button><br>
 	  	  </label><br>
-	        
-	    </div>
+	       
+	  	  <div class="container">
+	  	  	
+	  	  </div>	
+
+	 </div>
  	</div>
 </body>
 </html>
@@ -58,11 +62,45 @@
 
 			},
 			getImage() {
-				axios.get('http://35.197.135.159/image',{token:this.token})
+				console.log("======",this.token)
+				axios.get('http://35.197.135.159/image',{
+					headers:{
+						authorization:this.token	
+					}
+				})
 				.then(response=>{
 					console.log(response)
 				})
+			},
+
+
+
+			handleFileUpload() {
+				console.log("=====",this.$refs.file.files)
+				this.file = this.$refs.file.files[0]
+			},
+			uploadFile() {
+				let formData =  new FormData();
+				formData.append("file",this.file);
+				// console.log("formdata",formData)
+
+				axios.post('http://35.197.135.159/image',
+					formData,
+					{
+						headers:{
+							authorization:this.token,
+							'Content-Type' : 'multipart/form-data'
+						}
+					})
+				.then((response)=>{
+					console.log(response)
+					console.log("success")
+				})
+				.catch(err=>{
+					console.log("fail",err)
+				})
 			}
+
 
 		},
 
